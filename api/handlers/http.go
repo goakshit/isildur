@@ -29,7 +29,6 @@ func NewHTTPHandler(
 
 // CreateSubscription creates a subscription.
 func (h *HTTPHandler) CreateSubscription(ctx *gin.Context) {
-	// var request marqetagen.CardProductRequest
 	// if err := ctx.BindJSON(&request); err != nil {
 	// 	ctx.AbortWithStatusJSON(http.StatusBadRequest, err)
 	// 	return
