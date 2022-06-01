@@ -35,8 +35,6 @@ func (ss SubscriptionService) CreateSubscription(
 	durationInMonths int8,
 	startDate time.Time,
 ) error {
-	// We can validate the startDate to be today or in future. If
-	// startDate is in past, it can be considered invalid.
 
 	var status domain.SubscriptionStatus = domain.SubscriptionStatusInactive
 	todayDate := time.Now().Truncate(24 * time.Hour)
