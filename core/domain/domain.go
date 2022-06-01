@@ -6,6 +6,27 @@ import (
 	"github.com/google/uuid"
 )
 
+type SubscriptionStatus string
+
+func (s SubscriptionStatus) String() string {
+	return string(s)
+}
+
+var (
+
+	// SubscriptionStatusActive represents activate subscription status
+	SubscriptionStatusActive SubscriptionStatus = "active"
+
+	// SubscriptionStatusPaused represents paused subscription status
+	SubscriptionStatusPaused SubscriptionStatus = "paused"
+
+	// SubscriptionStatusCancel represents cancel subscription status
+	SubscriptionStatusCancel SubscriptionStatus = "cancel"
+
+	// SubscriptionStatusInactive represents inactive subscription status
+	SubscriptionStatusInactive SubscriptionStatus = "inactive"
+)
+
 // Product represents structure for product entity in db.
 type Product struct {
 	ID             uuid.UUID `json:"id" gorm:"type:uuid;primary_key;"`
@@ -17,12 +38,12 @@ type Product struct {
 
 // Subscription represents structure for subscription entity in db.
 type Subscription struct {
-	ID               uuid.UUID `json:"id" gorm:"type:uuid;primary_key;"`
-	ProductID        uuid.UUID `json:"-"`
-	DurationInMonths int8      `json:"duration_in_months"`
-	Tax              float64   `json:"tax"`
-	TotalCost        float64   `json:"total_cost"`
-	Status           string    `json:"status"`
-	StartDate        time.Time `json:"start_date"`
-	EndDate          time.Time `json:"end_date"`
+	ID               uuid.UUID          `json:"id" gorm:"type:uuid;primary_key;"`
+	ProductID        uuid.UUID          `json:"-"`
+	DurationInMonths int8               `json:"duration_in_months"`
+	Tax              float64            `json:"tax"`
+	TotalCost        float64            `json:"total_cost"`
+	Status           SubscriptionStatus `json:"status"`
+	StartDate        time.Time          `json:"start_date"`
+	EndDate          time.Time          `json:"end_date"`
 }

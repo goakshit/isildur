@@ -6,8 +6,10 @@ import (
 
 // CFG represents root structure of env configuration of the service.
 type CFG struct {
-	ServiceName string
-	DB          DBConfig
+	ServiceName  string
+	ServicePort  string
+	ServiceLevel string
+	DB           DBConfig
 }
 
 // DBConfig represents configuration used to connect with the db.
@@ -22,7 +24,9 @@ type DBConfig struct {
 // LoadFromEnv will load the env vars from the OS.
 func LoadFromEnv() *CFG {
 	return &CFG{
-		ServiceName: getEnv("SERVICE_NAME", "subscription-service"),
+		ServiceName:  getEnv("SERVICE_NAME", "subscription-service"),
+		ServicePort:  getEnv("SERVICE_PORT", "8000"),
+		ServiceLevel: getEnv("SERVICE_LEVEL", "debug"),
 		DB: DBConfig{
 			User: getEnv("DB_USER", "gymondo_user"),
 			Pass: getEnv("DB_PASS", "gymondo_pass"),

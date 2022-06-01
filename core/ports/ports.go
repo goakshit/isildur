@@ -4,6 +4,7 @@ package ports
 
 import (
 	"context"
+	"time"
 
 	"github.com/goakshit/isildur/core/domain"
 	"github.com/google/uuid"
@@ -29,8 +30,10 @@ type SubscriptionsRepository interface {
 
 // SubscriptionService describes main business functionality of subscription service.
 type SubscriptionService interface {
-	//
-	// CreateSubscription(ctx context.Context, )
+	// CreateSubscription creates susbscription for a product.
+	CreateSubscription(ctx context.Context, pID uuid.UUID, durationInMonths int8, startDate time.Time) error
+	// FetchSubscription fetches subscription for a given ID.
+	FetchSubscription(ctx context.Context, id uuid.UUID) (domain.Subscription, error)
 }
 
 // ProductsService describes main business functionality of products.

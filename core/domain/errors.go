@@ -11,4 +11,10 @@ var (
 
 	// ErrProductIDIsInvalid is the error used when a given product id is an invalid uuid.
 	ErrProductIDIsInvalid = errors.New("invalid product id")
+
+	// ErrSubscriptionIDIsInvalid is the error used when a given subscription id is an invalid uuid.
+	ErrSubscriptionIDIsInvalid = errors.New("invalid subscription id")
+
+	// ErrInvalidStartDate is the error used when a given start date passed is invalid.
+	ErrInvalidStartDate = errors.New("invalid start date")
 )
