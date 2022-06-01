@@ -86,3 +86,12 @@ func (ss SubscriptionService) FetchSubscription(ctx context.Context, id uuid.UUI
 	}
 	return ss.subsRepo.GetByID(ctx, id)
 }
+
+func (ss SubscriptionService) UpdateSubscriptionStatus(ctx context.Context, id uuid.UUID, status domain.SubscriptionStatus) error {
+	if id == uuid.Nil {
+		return domain.ErrSubscriptionIDIsInvalid
+	}
+	return ss.subsRepo.Patch(ctx, id, map[string]interface{}{
+		"status": status,
+	})
+}

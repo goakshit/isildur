@@ -21,11 +21,27 @@ var (
 	SubscriptionStatusPaused SubscriptionStatus = "paused"
 
 	// SubscriptionStatusCancel represents cancel subscription status
-	SubscriptionStatusCancel SubscriptionStatus = "cancel"
+	SubscriptionStatusCancel SubscriptionStatus = "cancelled"
 
 	// SubscriptionStatusInactive represents inactive subscription status
 	SubscriptionStatusInactive SubscriptionStatus = "inactive"
 )
+
+// MapStringToSubscriptionStatus maps string literal to SubscriptionStatus type.
+func MapStringToSubscriptionStatus(status string) SubscriptionStatus {
+	switch status {
+	case "active":
+		return SubscriptionStatusActive
+	case "paused":
+		return SubscriptionStatusPaused
+	case "cancelled":
+		return SubscriptionStatusCancel
+	case "inactive":
+		return SubscriptionStatusInactive
+	default:
+		return ""
+	}
+}
 
 // Product represents structure for product entity in db.
 type Product struct {

@@ -43,7 +43,11 @@ func (sr SubscriptionsRepository) Create(ctx context.Context, sub domain.Subscri
 
 // Patch updates the data in subscription for a given id.
 func (sr SubscriptionsRepository) Patch(ctx context.Context, id uuid.UUID, update map[string]interface{}) error {
-	updateOP := sr.db.WithContext(ctx).Updates(update)
+	updateOP := sr.db.WithContext(ctx).Model(&domain.Subscription{}).
+		Where(&domain.Subscription{
+			ID: id,
+		}).
+		Updates(update)
 	if updateOP.Error != nil {
 		return updateOP.Error
 	}

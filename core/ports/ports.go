@@ -34,6 +34,8 @@ type SubscriptionService interface {
 	CreateSubscription(ctx context.Context, pID uuid.UUID, durationInMonths int8, startDate time.Time) error
 	// FetchSubscription fetches subscription for a given ID.
 	FetchSubscription(ctx context.Context, id uuid.UUID) (domain.Subscription, error)
+	// UpdateSubscriptionStatus updates subscription for a given ID.
+	UpdateSubscriptionStatus(ctx context.Context, id uuid.UUID, status domain.SubscriptionStatus) error
 }
 
 // ProductsService describes main business functionality of products.

@@ -26,6 +26,7 @@ func SetupRouter(cfg *config.CFG, db *gorm.DB) *gin.Engine {
 	{
 		subscriptionAPI.POST("/", handler.CreateSubscription)
 		subscriptionAPI.GET(fmt.Sprintf("/:%s", constants.SubscriptionIDKey), handler.FetchSubscription)
+		subscriptionAPI.PATCH(fmt.Sprintf("/:%s", constants.SubscriptionIDKey), handler.UpdateSubscriptionStatus)
 	}
 	productsAPI := api.Group("/products")
 	{

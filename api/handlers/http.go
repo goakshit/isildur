@@ -130,6 +130,51 @@ func (h *HTTPHandler) FetchSubscription(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, subscription)
 }
 
+// UpdateSubscriptionStatus updates the state of subscription for a given id.
+func (h *HTTPHandler) UpdateSubscriptionStatus(ctx *gin.Context) {
+	sID, err := uuid.Parse(ctx.Param(constants.SubscriptionIDKey))
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, ErrorResponse{
+			StatusCode: http.StatusBadRequest,
+			Error:      err.Error(),
+		})
+		return
+	}
+
+	updateStatus := ctx.Query("status")
+	if updateStatus == "" || domain.MapStringToSubscriptionStatus(updateStatus) == "" {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, ErrorResponse{
+			StatusCode: http.StatusBadRequest,
+			Error:      domain.ErrInvalidSubscriptionStatusPassed.Error(),
+		})
+		return
+	}
+
+	subscription, err := h.Subs.FetchSubscription(ctx, sID)
+	if err != nil {
+		errResp := mapErrorResponseFromError(err)
+		ctx.AbortWithStatusJSON(errResp.StatusCode, errResp)
+		return
+	}
+
+	// Error handling: Don't allow subscription to be active if it is cancelled
+	if subscription.Status == domain.SubscriptionStatusCancel {
+		errResp := mapErrorResponseFromError(domain.ErrCannotUpdateCancelledSubscription)
+		ctx.AbortWithStatusJSON(errResp.StatusCode, errResp)
+		return
+	}
+
+	if err = h.Subs.UpdateSubscriptionStatus(ctx, sID, domain.MapStringToSubscriptionStatus(updateStatus)); err != nil {
+		errResp := mapErrorResponseFromError(err)
+		ctx.AbortWithStatusJSON(errResp.StatusCode, errResp)
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"status_code": http.StatusOK,
+		"message":     "Successfully updated the subscription status.",
+	})
+}
+
 func mapErrorResponseFromError(err error) ErrorResponse {
 	resp := ErrorResponse{
 		Error:      err.Error(),
@@ -142,7 +187,8 @@ func mapErrorResponseFromError(err error) ErrorResponse {
 
 	} else if errors.Is(err, domain.ErrProductIDIsInvalid) ||
 		errors.Is(err, domain.ErrInvalidStartDate) ||
-		errors.Is(err, domain.ErrSubscriptionIDIsInvalid) {
+		errors.Is(err, domain.ErrSubscriptionIDIsInvalid) ||
+		errors.Is(err, domain.ErrCannotUpdateCancelledSubscription) {
 
 		resp.StatusCode = http.StatusBadRequest
 
