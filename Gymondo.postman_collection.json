@@ -1,0 +1,161 @@
+{
+	"info": {
+		"_postman_id": "ce6505a7-a5e0-4bd5-b47f-829c2d277fcd",
+		"name": "Gymondo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get product by ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"product_id\": \"56f79fee-0cb0-4e87-9bca-7b5811cca4ce\",\n    \"start_date\": \"02-06-2022\",\n    \"duration_in_months\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/products/56f79fee-0cb0-4e87-9bca-7b5811cca4ce",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"56f79fee-0cb0-4e87-9bca-7b5811cca4ce"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Subscription",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"product_id\": \"56f79fee-0cb0-4e87-9bca-7b5811cca4ce\",\n    \"start_date\": \"02-06-2022\",\n    \"duration_in_months\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/subscription/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"subscription",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patch subscription status",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"product_id\": \"56f79fee-0cb0-4e87-9bca-7b5811cca4ce\",\n    \"start_date\": \"02-06-2022\",\n    \"duration_in_months\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/subscription/872e40f9-059a-403e-92de-f81b7b9f74a3?status=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"subscription",
+						"872e40f9-059a-403e-92de-f81b7b9f74a3"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Subscription",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"product_id\": \"56f79fee-0cb0-4e87-9bca-7b5811cca4ce\",\n    \"start_date\": \"02-06-2022\",\n    \"duration_in_months\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/subscription/dc018826-203f-4bec-8ed8-388ae34c0223",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"subscription",
+						"dc018826-203f-4bec-8ed8-388ae34c0223"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

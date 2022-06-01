@@ -1,0 +1,36 @@
+version: "3"
+services:
+  database:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - ./build/scripts/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - backend-network  
+  isildur:
+    hostname: isildur
+    build:
+        context: ../..
+        dockerfile: ./build/docker/subscription/Dockerfile
+    environment:
+      - SERVICE_NAME=subscription-service
+      - DB_HOST=database
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_NAME=${DB_NAME}
+      - DB_SSL_MODE=disable
+      - GIN_MODE=${SERVICE_LEVEL}
+      - SERVICE_PORT=${SERVICE_PORT}
+    container_name: subscription-service
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+    networks:
+        - backend-network
+networks:
+    backend-network:
+        name: backend-network

@@ -25,7 +25,7 @@ type DBConfig struct {
 func LoadFromEnv() *CFG {
 	return &CFG{
 		ServiceName:  getEnv("SERVICE_NAME", "subscription-service"),
-		ServicePort:  getEnv("SERVICE_PORT", "8000"),
+		ServicePort:  getEnv("SERVICE_PORT", "8080"),
 		ServiceLevel: getEnv("SERVICE_LEVEL", "debug"),
 		DB: DBConfig{
 			User: getEnv("DB_USER", "gymondo_user"),
