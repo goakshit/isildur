@@ -11,6 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// SetupRouter intialises services, repositories, sets up routing to correct handlers.
 func SetupRouter(r *gin.Engine, cfg *config.CFG, db *gorm.DB) {
 	api := r.Group("/api")
 

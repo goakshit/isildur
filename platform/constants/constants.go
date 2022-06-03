@@ -1,3 +1,4 @@
+// Package holds constants used throughout the application.
 package constants
 
 const (

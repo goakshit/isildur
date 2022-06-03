@@ -1,3 +1,5 @@
+// Package is responsible for routing, validating, intial handling of
+// requests.
 package handlers
 
 import (
@@ -30,7 +32,7 @@ func NewHTTPHandler(
 	}
 }
 
-// CreateSubscription creates a subscription.
+// CreateSubscription creates a subscription for a given product.
 func (h *HTTPHandler) CreateSubscription(ctx *gin.Context) {
 	r := CreateSubscriptionRequest{}
 	if err := ctx.BindJSON(&r); err != nil {
@@ -41,6 +43,7 @@ func (h *HTTPHandler) CreateSubscription(ctx *gin.Context) {
 		return
 	}
 
+	// Validate the request data
 	if _, err := govalidator.ValidateStruct(r); err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, ErrorResponse{
 			StatusCode: http.StatusBadRequest,

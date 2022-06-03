@@ -1,4 +1,5 @@
-// Package
+// Entrypoint of subscripton application. Loads the config from env,
+// initialises the gorm db client and starts serving the requests.
 package main
 
 import (

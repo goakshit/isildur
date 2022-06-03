@@ -1,3 +1,5 @@
+// Domain package is responsible for all domain related objects,
+// like errors, subscription statuses and so on.
 package domain
 
 import (
@@ -6,6 +8,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// SubscriptionStatus reprsents the applicable status for the a subscription.
 type SubscriptionStatus string
 
 func (s SubscriptionStatus) String() string {
