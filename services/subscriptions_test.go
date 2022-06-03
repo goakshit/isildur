@@ -152,3 +152,128 @@ func (ts *SubscriptionsServiceTestSuite) TestSubscriptionService_Create() {
 		})
 	}
 }
+
+func (ts *SubscriptionsServiceTestSuite) TestSubscriptionService_FetchSubscription() {
+	ctx := context.Background()
+	productID := uuid.New()
+	subscription := domain.Subscription{
+		ID:               uuid.New(),
+		ProductID:        productID,
+		DurationInMonths: 3,
+		Tax:              0.77,
+		TotalCost:        10.77,
+		Status:           domain.SubscriptionStatusInactive,
+		StartDate:        time.Now().AddDate(0, 0, 1),
+		EndDate:          time.Now().AddDate(0, 3, 1),
+	}
+
+	type GetByIDMock struct {
+		timesToCall int
+		retSub      domain.Subscription
+		retErr      error
+	}
+
+	tc := []struct {
+		Name            string
+		err             error
+		ID              uuid.UUID
+		responsePayload domain.Subscription
+		getByID         GetByIDMock
+	}{
+		{
+			Name:            "Fetch subscription success",
+			ID:              productID,
+			err:             nil,
+			responsePayload: subscription,
+			getByID: GetByIDMock{
+				timesToCall: 1,
+				retSub:      subscription,
+				retErr:      nil,
+			},
+		},
+		{
+			Name:            "Fetch subscription: invalid product id",
+			ID:              uuid.Nil,
+			err:             domain.ErrSubscriptionIDIsInvalid,
+			responsePayload: domain.Subscription{},
+			getByID: GetByIDMock{
+				timesToCall: 0,
+			},
+		},
+		{
+			Name:            "Fetch subscription: product doesn't exist",
+			ID:              productID,
+			err:             domain.ErrSubscriptionIDIsInvalid,
+			responsePayload: domain.Subscription{},
+			getByID: GetByIDMock{
+				timesToCall: 1,
+				retSub:      domain.Subscription{},
+				retErr:      domain.ErrSubscriptionIDIsInvalid,
+			},
+		},
+	}
+
+	for _, tt := range tc {
+		ts.Run(tt.Name, func() {
+			ts.subscriptionsRepo.EXPECT().
+				GetByID(gomock.Any(), gomock.Any()).
+				Times(tt.getByID.timesToCall).
+				Return(tt.getByID.retSub, tt.getByID.retErr)
+			gotSubscription, err := ts.service.FetchSubscription(ctx, tt.ID)
+			if tt.err != nil {
+				ts.Assert().NotNil(err)
+				ts.Assert().EqualError(err, tt.err.Error())
+			} else {
+				ts.Assert().Nil(err)
+				ts.Assert().EqualValues(subscription, gotSubscription)
+			}
+		})
+	}
+}
+
+func (ts *SubscriptionsServiceTestSuite) TestSubscriptionService_UpdateSubscriptionStatus() {
+	ctx := context.Background()
+	productID := uuid.New()
+
+	type patchMock struct {
+		timesToCall int
+		retErr      error
+	}
+
+	tc := []struct {
+		Name      string
+		err       error
+		Status    domain.SubscriptionStatus
+		ID        uuid.UUID
+		patchMock patchMock
+	}{
+		{
+			Name:   "Update subscription status success",
+			ID:     productID,
+			Status: domain.SubscriptionStatusActive,
+			err:    nil,
+			patchMock: patchMock{
+				timesToCall: 1,
+				retErr:      nil,
+			},
+		},
+	}
+
+	for _, tt := range tc {
+		ts.Run(tt.Name, func() {
+			ts.subscriptionsRepo.EXPECT().
+				Patch(gomock.Any(), tt.ID, map[string]interface{}{
+					"status": tt.Status,
+				}).
+				Times(tt.patchMock.timesToCall).
+				Return(tt.patchMock.retErr)
+			err := ts.service.UpdateSubscriptionStatus(ctx, tt.ID, tt.Status)
+			if tt.err != nil {
+				ts.Assert().NotNil(err)
+				ts.Assert().EqualError(err, tt.err.Error())
+			} else {
+				ts.Assert().Nil(err)
+			}
+		})
+	}
+}

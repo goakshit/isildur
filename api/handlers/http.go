@@ -93,7 +93,7 @@ func (h *HTTPHandler) FetchAllProducts(ctx *gin.Context) {
 }
 
 // FetchProduct fetches all the available products.
-func (h *HTTPHandler) Fetchproduct(ctx *gin.Context) {
+func (h *HTTPHandler) FetchProduct(ctx *gin.Context) {
 	pID, err := uuid.Parse(ctx.Param(constants.ProductIDKey))
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, ErrorResponse{
